@@ -1,4 +1,5 @@
-{
+{ 
+  "type": "module",
   "name": "freeaccounts",
   "version": "1.0.0",
   "description": "make free accounts fo firms",
