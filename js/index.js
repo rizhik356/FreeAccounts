@@ -1,16 +1,23 @@
 import { renderTable } from "./renderTable.js";
 import { renderPDF } from "./renderPDF.js";
 
-const payForm = document.querySelector('.payForm');
-const dataForm = document.querySelector('.first-form')
+const forms = {
+    payForm: document.querySelector('.payForm'),
+    dataForm: document.querySelector('.first-form'),
+    footerForm: document.querySelector('.footer-form'),
+};
+let i = 0;
+
 document.querySelector('.addPayment').addEventListener('click', (e) =>{
     e.preventDefault();
-    renderTable(payForm);
-    payForm.reset();
+    renderTable(forms.payForm);
+    forms.payForm.reset();
 });
 
 document.querySelector('.finish').addEventListener('click', (e) => {
     e.preventDefault();
-    renderPDF(dataForm);
-    dataForm.reset();
-})
+    renderPDF(forms.dataForm, forms.footerForm, i);
+    Object.values(forms).forEach((item) => item.reset());
+    document.querySelector('.for-table').innerHTML = '';
+    i = 0;
+});

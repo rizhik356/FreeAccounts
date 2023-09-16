@@ -3,17 +3,18 @@ const renderTable = (form) => {
     const name = newForm.get('paymentText');
     const number = newForm.get('paymentQuamnity') === '' ? 1 : newForm.get('paymentQuamnity');
     const counts = 'шт';
-    const pay = newForm.get('sumPayment');
+    const pay = newForm.get('sumPayment').replace(',', '.');
     const table = document.querySelector('.table');
-    const sum = number * pay;
+    const normalizeSum = new Intl.NumberFormat('ru', { style: 'currency', currency: 'RUB'});
+    const sum = normalizeSum.format(pay * number);
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td>${name}</td>
-      <td>${number}</td>
-      <td>${counts}</td>
-      <td>${pay}</td>
-      <td>${sum}</td>
-      <td><button type="submit" class="btn btn-danger delete-btn">Удалить</button></td>
+      <td class="name">${name}</td>
+      <td class="number">${number}</td>
+      <td class="counts">${counts}</td>
+      <td class="pay">${normalizeSum.format(pay)}</td>
+      <td class="sum">${sum}</td>
+      <td  class="button"><button type="submit" class="btn btn-danger delete-btn">Удалить</button></td>
     `;
 
     if (table === null) {

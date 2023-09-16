@@ -1,15 +1,1 @@
-{ 
-  "type": "module",
-  "name": "freeaccounts",
-  "version": "1.0.0",
-  "description": "make free accounts fo firms",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "rizhik356",
-  "license": "ISC",
-  "devDependencies": {
-    "eslint": "^8.48.0"
-  }
-}
+{"type":"module","name":"freeaccounts","version":"1.0.0","description":"make free accounts fo firms","main":"index.js","scripts":{"test":"echo \"Error: no test specified\" && exit 1"},"author":"rizhik356","license":"ISC","devDependencies":{"eslint":"^8.48.0"},"dependencies":{"pdfmake":"^0.2.7"}}
