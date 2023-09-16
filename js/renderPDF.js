@@ -229,12 +229,204 @@ const renderPDF = (form1, form2, i) => {
                         }
                     }
                 ],
+                margin: [0, 30, 0, 0],
+                pageBreak: 'after',
+            },
+            {
+                text: `Акт № ${makeNumAccount(form2)} от ${makeData(form2, 'inputDatePayment')} г.`,
+                style: 'header',
+                bold: true,
+                alignment: 'left',
+                margin: [0, 20, 0, 0],
+            },
+            {canvas: [ { type: 'line', x1: 0, y1: 0, x2: 515, y2: 0, lineWidth: 2 } ]},
+            {
+                columns: [
+                    {
+                        width: 'auto',
+                        text: `Поставщик\n(Исполнитель):`,
+                        margin: [0, 0, 15, 0]
+                    },
+                    {
+                        width: '*',
+                        text: `${accountData.name}, ${accountData.INN}, ${accountData.adress}, тел.: ${accountData.phone}`
+                    }
+                ],
+                margin:[0, 10, 0, 0],
+            },
+            {
+                columns: [
+                    {
+                        width: 'auto',
+                        text: `Покупатель\n(Заказчик):`,
+                        margin: [0, 0, 15, 0]
+                    },
+                    {
+                        width: '*',
+                        text: `${accountData.name2}, ${accountData.INN2}, ${accountData.index2}, ${accountData.KPP2}, ${accountData.adress2}`
+                    }
+                ],
+                margin:[0, 10, 0, 0],
+            },
+            {
+                columns: [
+                    {
+                        width: 'auto',
+                        text: `Основание:`,
+                        margin: [0, 15, 15, 0],
+                    },
+                    {
+                        width: '*',
+                        text: `Основной договор`,
+                        bold: true,
+                        margin: [0, 15, 0, 15],
+                    }
+                ]
+            },
+            makeTable(price),
+            {
+                columns: [
+                    {
+                        width: '*',
+                        text: '',
+                    },
+                    {
+                        width: 'auto',
+                        text: 'Итого:',
+                        bold: true
+                    }, 
+                    {
+                        width: 'auto',
+                        text: makeSum('formatSum'),
+                        margin: [15, 0, 0, 0],
+                    }
+                ],
                 margin: [0, 15, 0, 0],
-            }
-        ]
+            },
+            {
+                columns: [
+                    {
+                        width: '*',
+                        text: '',
+                    },
+                    {
+                        width: 'auto',
+                        text: 'В том числе НДС:',
+                        bold: true
+                    }, 
+                    {
+                        width: 'auto',
+                        text: makeNDS(form2, 'nds'),
+                        margin: [15, 0, 0, 0],
+                    }
+                ],
+                margin: [0, 15, 0, 0],
+            },
+            {
+                columns: [
+                    {
+                        width: '*',
+                        text: '',
+                    },
+                    {
+                        width: 'auto',
+                        text: 'Всего к оплате:',
+                        bold: true
+                    }, 
+                    {
+                        width: 'auto',
+                        text: makeNDS(form2, 'sum'),
+                        margin: [15, 0, 0, 0],
+                    }
+                ],
+                margin: [0, 15, 0, 0],
+            },
+            {
+                columns: [
+                    {
+                        width: 'auto',
+                        text: `Всего наименований ${i}, на сумму ${makeNDS(form2, 'sum')} руб.`,
+                    }
+                ]
+            },
+            {
+                columns: [
+                    {
+                        width: 'auto',
+                        text: sum_letters(makeNDS(form2, 'sumWithoutRender')),
+                        bold: true,
+                        margin: [0, 5, 0, 0],
+                    }
+                ]
+            },
+            {
+                columns: [
+                    {
+                        width: 'auto',
+                        text: 'Вышеперечисленные услуги выполнены полностью и в срок.',
+                        margin: [0, 5, 0, 0],
+                    }
+                ]
+            },
+            {
+                columns: [
+                    {
+                        width: 'auto',
+                        text: 'Заказчик претензий по объему, качеству и срокам оказания услуг не имеет.',
+                        margin: [0, 5, 0, 15],
+                    }
+                ]
+            },
+            {canvas: [ { type: 'line', x1: 0, y1: 0, x2: 515, y2: 0, lineWidth: 2 } ]},
+            {
+                columns: [
+                    {
+                        width: '*',
+                        text:'Исполнитель',
+                        bold: true,
+                        margin: [0, 15, 0, 5],
+                    },
+                    {
+                        width: 90,
+                        text: '',
+                        margin: [0, 15, 0, 5],
+                    },
+                    {
+                        width: '*',
+                        text:'Заказчик',
+                        bold: true,
+                        margin: [0, 15, 0, 5],
+                    }
+                ],
+            }, 
+            {
+                table: {
+                    widths: ['*', 90, '*'],
+                    body: [
+                        [
+                            {
+                                text: `${accountData.name}`,
+                                border: [false, false, false, true],
+                                margin: [0, 0, 0, 30],
+                            }, 
+                            {
+                                text: '',
+                                border: [false, false, false, false],
+                                margin: [0, 0, 0, 30],
+                            },
+                            {
+                                text: `${accountData.name}`,
+                                margin: [0, 0, 0, 30],
+                                border: [false, false, false, true],
+                            }
+                        ]
+                    ]
+                }
+            },
+        ],
       }
       // eslint-disable-next-line no-undef
-      pdfMake.createPdf(docDefinition).open();
+      pdfMake.createPdf(docDefinition).download(`${makeNumAccount(form2)}-${makeData(form2, 'inputDatePayment')}.pdf`);
 };
 const makeNumAccount = (form2) => {
     const form = new FormData(form2)

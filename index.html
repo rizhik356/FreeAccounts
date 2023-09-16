@@ -140,7 +140,15 @@
                             </form>
                               <div class="row col-9 mt-2 for-table"></div>
                               <form class="footer-form">
-                              <div class="row mt-2"> 
+                              <div class="row mt-2">
+                                <div class="col-2">
+                                    <label for="numAccount" class="form-label">Номер счета</label>
+                                    <input type="number" name="numAccount" min="1" class="form-control" id="numAccount" placeholder="1">
+                                </div>
+                                <div class="col-3">
+                                    <label for="inputDatePayment" class="form-label">Дата счета</label>
+                                    <input type="date" name="inputDatePayment" class="form-control" id="inputDatePayment">
+                                  </div> 
                                 <div class="col-3">
                                   <label for="inputMaxDatePayment" class="form-label">Оплатить не позднее</label>
                                   <input type="date" name="inputMaxDatePayment" class="form-control" id="inputMaxDatePayment">
@@ -153,14 +161,6 @@
                                         <option value="10%">10%</option>
                                         <option value="18%">18%</option>
                                       </select>
-                                </div>
-                                <div class="col-3">
-                                    <label for="inputDatePayment" class="form-label">Дата счета</label>
-                                    <input type="date" name="inputDatePayment" class="form-control" id="inputDatePayment">
-                                  </div>
-                                  <div class="col-2">
-                                    <label for="numAccount" class="form-label">Номер счета</label>
-                                    <input type="number" name="numAccount" min="1" class="form-control" id="numAccount" placeholder="1">
                                 </div>
                         </div>
                     </form>
