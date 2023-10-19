@@ -1,18 +1,19 @@
+import RenderAmmount from "./RenderAmmount.js";
+
 const renderTable = (form) => {
     const newForm = new FormData(form);
     const name = newForm.get('paymentText');
     const number = newForm.get('paymentQuamnity') === '' ? 1 : newForm.get('paymentQuamnity');
     const counts = 'шт';
-    const pay = newForm.get('sumPayment').replace(',', '.');
+    const pay = new RenderAmmount(newForm.get('sumPayment'));
     const table = document.querySelector('.table');
-    const normalizeSum = new Intl.NumberFormat('ru', { style: 'currency', currency: 'RUB'});
-    const sum = normalizeSum.format(pay * number);
+    const sum = pay.toAmmountSum(number);
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td class="name">${name}</td>
       <td class="number">${number}</td>
       <td class="counts">${counts}</td>
-      <td class="pay">${normalizeSum.format(pay)}</td>
+      <td class="pay">${pay.toAmmount()}</td>
       <td class="sum">${sum}</td>
       <td  class="button"><button type="submit" class="btn btn-danger delete-btn">Удалить</button></td>
     `;
@@ -43,6 +44,7 @@ const deleteTarget = () => {
 
     deleteBtn.forEach((btns) => {
         btns.addEventListener('click', (e) => {
+          e.stopImmediatePropagation();  
           e.target.closest('tr').remove();
           if (document.querySelector('tbody').innerHTML.trim() == '') {
             document.querySelector('.table').remove();

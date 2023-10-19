@@ -1,4 +1,5 @@
 import { sum_letters } from "./AmmountInWords.js";
+import RenderAmmount from "./RenderAmmount.js";
 
 const renderPDF = (form1, form2, i) => {
     const newForm = new FormData(form1);
@@ -59,7 +60,7 @@ const renderPDF = (form1, form2, i) => {
                     },
                     {
                         width: '*',
-                        text: `${accountData.name}, ${accountData.INN}, ${accountData.adress}, тел.: ${accountData.phone}`
+                        text: `${accountData.name}, ИНН ${accountData.INN}, ${accountData.adress}, тел.: ${accountData.phone}`
                     }
                 ],
                 margin:[0, 10, 0, 0],
@@ -73,7 +74,7 @@ const renderPDF = (form1, form2, i) => {
                     },
                     {
                         width: '*',
-                        text: `${accountData.name2}, ${accountData.INN2}, ${accountData.index2}, ${accountData.KPP2}, ${accountData.adress2}`
+                        text: `${accountData.name2}, ИНН ${accountData.INN2}, КПП ${accountData.KPP2}, ${accountData.index2}, ${accountData.adress2}`
                     }
                 ],
                 margin:[0, 10, 0, 0],
@@ -93,7 +94,7 @@ const renderPDF = (form1, form2, i) => {
                     }
                 ]
             },
-            makeTable(price),
+            makeTable(price, i),
             {
                 columns: [
                     {
@@ -155,7 +156,7 @@ const renderPDF = (form1, form2, i) => {
                 columns: [
                     {
                         width: 'auto',
-                        text: `Всего наименований ${i}, на сумму ${makeNDS(form2, 'sum')} руб.`,
+                        text: `Всего наименований ${makeTable(price, i, 'i')}, на сумму ${makeNDS(form2, 'sum')} руб.`,
                     }
                 ]
             },
@@ -283,7 +284,7 @@ const renderPDF = (form1, form2, i) => {
                     }
                 ]
             },
-            makeTable(price),
+            makeTable(price, i),
             {
                 columns: [
                     {
@@ -345,7 +346,7 @@ const renderPDF = (form1, form2, i) => {
                 columns: [
                     {
                         width: 'auto',
-                        text: `Всего наименований ${i}, на сумму ${makeNDS(form2, 'sum')} руб.`,
+                        text: `Всего наименований ${makeTable(price, i, 'i')}, на сумму ${makeNDS(form2, 'sum')} руб.`,
                     }
                 ]
             },
@@ -415,7 +416,7 @@ const renderPDF = (form1, form2, i) => {
                                 margin: [0, 0, 0, 30],
                             },
                             {
-                                text: `${accountData.name}`,
+                                text: `${accountData.name2}`,
                                 margin: [0, 0, 0, 30],
                                 border: [false, false, false, true],
                             }
@@ -451,9 +452,8 @@ const makeNDS = (form2, rule) => {
     if (rule === 'nds') {
         return getForm;
     } if (rule === 'sum') {
-        const formatToSumWithNds = new Intl.NumberFormat('ru', { style: 'currency', currency: 'RUB'})
-        .format(sumWithNds).slice(0, -2);
-        return formatToSumWithNds;
+        const formatToSumWithNds = new RenderAmmount(sumWithNds);
+        return formatToSumWithNds.toAmmountWithoutCurrency();
     } if (rule === 'sumWithoutRender') {
         return sumWithNds;
     }
@@ -462,13 +462,14 @@ const makeNDS = (form2, rule) => {
 const makeSum = (rule) => {
     const renderPrice = renderAccountPrice();
     const renderPriceToNumber = renderPrice.reduce((acc, item) => {
-       return Number(item.sum.replace(' ', '').replace(',', '.')) + acc
+        const itemToAccount = new RenderAmmount(item.sum);
+       return itemToAccount.toNumber() + acc;
     }, 0);
          if (rule === 'sum') {
             return renderPriceToNumber;
          } if (rule === 'formatSum') {
-            const formatToCuurency = new Intl.NumberFormat('ru', { style: 'currency', currency: 'RUB'});
-            return formatToCuurency.format(renderPriceToNumber).slice(0, -2);
+            const formatToCuurency = new RenderAmmount(renderPriceToNumber);
+            return formatToCuurency.toAmmountWithoutCurrency();
          }
 }
 
@@ -492,7 +493,7 @@ const renderAccountPrice = () => {
     return accountPrice;
 };
 
-const makeTable = (price) => {
+const makeTable = (price, i, operation = 'table') => {
     const newTable = {
         table: {
             widths: ['auto','*', 'auto', 'auto', 'auto', 'auto'],
@@ -502,16 +503,14 @@ const makeTable = (price) => {
         }
     };
 
-    price.map((item, i) => {
+    price.map((item) => {
        const arr = [];
        i += 1;
        Object.values(item).forEach((value) => arr.push(value));
        arr.unshift(i);
        newTable.table.body.push(arr);
     });
-return newTable;
-
-
+return operation === 'i' ? i:  newTable;
 }
 
 export { renderPDF };

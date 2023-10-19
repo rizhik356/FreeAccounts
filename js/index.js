@@ -6,7 +6,6 @@ const forms = {
     dataForm: document.querySelector('.first-form'),
     footerForm: document.querySelector('.footer-form'),
 };
-let i = 0;
 
 document.querySelector('.addPayment').addEventListener('click', (e) =>{
     e.preventDefault();
@@ -16,6 +15,7 @@ document.querySelector('.addPayment').addEventListener('click', (e) =>{
 
 document.querySelector('.finish').addEventListener('click', (e) => {
     e.preventDefault();
+    let i = 0;
     renderPDF(forms.dataForm, forms.footerForm, i);
     Object.values(forms).forEach((item) => item.reset());
     document.querySelector('.for-table').innerHTML = '';
